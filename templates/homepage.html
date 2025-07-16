@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - Whispers of What We Were{% endblock %}
+
+{% block content %}
+<div class="homepage-container">
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Whispers of What We Were</h1>
+            <p class="hero-subtitle">A love story told in fragments, echoing through ten chapters of memory</p>
+            
+            <div class="hero-description">
+                <p>Sometimes the most beautiful love stories are the ones that end before they truly begin. 
+                This is a tale of moments stolen, words unspoken, and a love that lives forever in the space between heartbeats.</p>
+                
+                <p>Journey through ten chapters of poetry and prose, where each page holds the essence of what we were, 
+                what we could have been, and what we carry in our hearts long after goodbye.</p>
+            </div>
+            
+            <div class="hero-actions">
+                <a href="{{ url_for('chapters') }}" class="start-reading-btn">
+                    <span>Start Reading</span>
+                    <i class="fas fa-heart"></i>
+                </a>
+            </div>
+        </div>
+        
+        <div class="hero-visual">
+            <div class="floating-rose">
+                <svg width="120" height="120" viewBox="0 0 120 120" class="rose-svg">
+                    <defs>
+                        <radialGradient id="roseGradient" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" style="stop-color:#ff6b8a;stop-opacity:0.8" />
+                            <stop offset="100%" style="stop-color:#c44569;stop-opacity:0.3" />
+                        </radialGradient>
+                    </defs>
+                    <path d="M60 20 C40 20, 20 40, 20 60 C20 80, 40 100, 60 100 C80 100, 100 80, 100 60 C100 40, 80 20, 60 20 Z" 
+                          fill="url(#roseGradient)" class="rose-petal" />
+                    <path d="M60 30 C45 30, 30 45, 30 60 C30 75, 45 90, 60 90 C75 90, 90 75, 90 60 C90 45, 75 30, 60 30 Z" 
+                          fill="url(#roseGradient)" class="rose-petal" />
+                    <circle cx="60" cy="60" r="15" fill="#8b2635" class="rose-center" />
+                </svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="preview-section">
+        <h2 class="preview-title">A glimpse into our story...</h2>
+        <div class="preview-quotes">
+            <div class="quote-card">
+                <p>"We were a thousand pieces of a puzzle that never quite fit together, yet somehow made the most beautiful picture when scattered."</p>
+                <span class="quote-source">— Chapter 1</span>
+            </div>
+            <div class="quote-card">
+                <p>"Even now, when the wind calls your name, I turn around hoping you might finally be there to answer."</p>
+                <span class="quote-source">— Chapter 10</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

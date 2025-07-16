@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block title %}Chapter {{ chapter_id }}: {{ chapter.title }} - Whispers of What We Were{% endblock %}
+
+{% block content %}
+<div class="chapter-container">
+    <div class="chapter-header">
+        <div class="chapter-navigation-top">
+            {% if prev_chapter %}
+                <a href="{{ url_for('chapter', chapter_id=prev_chapter) }}" class="nav-btn prev-btn">
+                    <i class="fas fa-chevron-left"></i>
+                    <span>Previous</span>
+                </a>
+            {% endif %}
+            
+            <a href="{{ url_for('chapters') }}" class="chapters-link">
+                <i class="fas fa-list"></i>
+                <span>All Chapters</span>
+            </a>
+            
+            {% if next_chapter %}
+                <a href="{{ url_for('chapter', chapter_id=next_chapter) }}" class="nav-btn next-btn">
+                    <span>Next</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            {% endif %}
+        </div>
+        
+        <div class="chapter-info">
+            <span class="chapter-number">Chapter {{ chapter_id }}</span>
+            <h1 class="chapter-title">{{ chapter.title }}</h1>
+        </div>
+    </div>
+    
+    <article class="chapter-content">
+        <div class="chapter-quote-section">
+            <blockquote class="chapter-quote">
+                <p>"{{ chapter.quote }}"</p>
+            </blockquote>
+        </div>
+        
+        <div class="chapter-body">
+            <div class="chapter-text">
+                {% if chapter_id == 1 %}
+                    <p>In the beginning, we were fragments scattered across the universe, each piece carrying the memory of what wholeness might feel like. You found me in the spaces between words, in the silence that follows laughter, in the moment just before dawn breaks the night.</p>
+                    
+                    <p>I remember the way you held my hand like it was made of stardust, afraid that too tight a grip might cause me to slip through your fingers and return to the cosmos. We were careful with each other, the way children are careful with soap bubbles, knowing that beauty is often fragile.</p>
+                    
+                    <p>Our love was written in a language neither of us fully understood, but we read it anyway, tracing the letters with our fingertips in the dark, hoping that understanding would come with time. Some stories are meant to be felt before they are comprehended.</p>
+                {% elif chapter_id == 2 %}
+                    <p>There came a day when your eyes began searching for something I couldn't give you. I watched you look at horizons, at strangers, at anything that might hold the answers to questions you never asked aloud.</p>
+                    
+                    <p>I learned to love you in periphery, stealing glances when you weren't looking, memorizing the curve of your smile when it was directed at everyone else. You became a beautiful ghost haunting my present tense.</p>
+                    
+                    <p>Still, I waited. Still, I hoped that your gaze would return to me with the same wonder it once held. Love makes optimists of us all, even when the evidence suggests we should know better.</p>
+                {% elif chapter_id == 3 %}
+                    <p>My desk drawer became a cemetery for unsent letters, each one a small death, each one holding words that felt too heavy for the air between us. I wrote you love letters at 3 AM, when the world was quiet enough to hear my heart breaking.</p>
+                    
+                    <p>"Dear you," they all began, though I could never find the courage to write your name. Names have power, and yours had too much power over me. I wrote about the way you laughed, the way you made coffee, the way you existed so effortlessly in a world I struggled to navigate.</p>
+                    
+                    <p>Those letters became my confession booth, my prayer book, my attempt to make sense of loving someone who was slowly becoming a stranger. Perhaps some words are meant to remain unspoken, living forever in the space between intention and action.</p>
+                {% elif chapter_id == 4 %}
+                    <p>You announced your departure the way winter announces spring—quietly, inevitably, with a gentleness that made the transition bearable but no less final. I knew this day would come; I had felt it in the changing rhythm of your breathing, in the way you started saying "I" instead of "we."</p>
+                    
+                    <p>That last evening, you wore the perfume I loved, and I wondered if it was cruelty or kindness. The scent lingered in the air long after you left, clinging to curtains and cushions like a ghost refusing to cross over. I found myself breathing deeper in those first days, trying to hold onto something that was already gone.</p>
+                    
+                    <p>Even now, months later, when I catch a hint of jasmine on the wind, I turn around expecting to see you. Some goodbyes never really end; they just learn to visit us in smaller, more manageable doses.</p>
+                {% elif chapter_id == 5 %}
+                    <p>We used to dance in my kitchen to songs only we could hear. Our bodies knew a rhythm that had nothing to do with music and everything to do with the way love moves through space. You would spin me around between the refrigerator and the counter, and for those moments, we were infinite.</p>
+                    
+                    <p>But silence crept in slowly, the way shadows creep across a room as the sun sets. First, it was comfortable—the quiet of people who didn't need words to communicate. Then it became heavy, pregnant with things we couldn't say, until even our shared silences felt like separate countries.</p>
+                    
+                    <p>The music stopped so gradually I didn't notice until I was standing alone in the kitchen, moving to a beat that no longer existed. Sometimes the end of a song is more beautiful than the song itself, but only if you're listening carefully enough to catch it.</p>
+                {% elif chapter_id == 6 %}
+                    <p>Habit is a stubborn thing. I still reach for your coffee mug in the morning, still save the funny articles I know you'd enjoy, still pause episodes of shows we used to watch together, waiting for your commentary that will never come.</p>
+                    
+                    <p>The house has learned to accommodate your absence, the way a broken bone learns to heal around the fracture. Furniture has shifted to fill the spaces you used to occupy. Light falls differently through windows you used to stand beside. Even the dust settles with a different pattern now.</p>
+                    
+                    <p>But in the quiet moments—when rain taps against the glass or when morning light slants across the empty chair where you used to read—I hear the echo of our life together. The house remembers you even when I try to forget.</p>
+                {% elif chapter_id == 7 %}
+                    <p>Photographs are cruel archivists, preserving moments that feel like they happened to other people. I found our pictures tucked in books, scattered in drawers, hiding in the digital albums of my phone like small ambushes of memory.</p>
+                    
+                    <p>Time has begun its slow theft, stealing the vividness from your smile, blurring the edges of your features until you exist more as feeling than image. But somehow this fading feels appropriate—you were always more energy than form, more presence than person.</p>
+                    
+                    <p>I've stopped trying to preserve what was perfectly. Instead, I let these images soften and blur, understanding that memory is not meant to be high-definition. Some things are more beautiful when seen through the gentle filter of time.</p>
+                {% elif chapter_id == 8 %}
+                    <p>We lived our entire relationship in the subjunctive mood—what we could have been, what we might have become, what we would have done if circumstances had been different. We were always one decision away from everything or nothing.</p>
+                    
+                    <p>I think about the parallel universe where we met five years earlier, where you didn't have to leave, where I was brave enough to say the words that might have changed everything. In that universe, we're probably having coffee right now, arguing about which movie to watch tonight.</p>
+                    
+                    <p>But perhaps our story was always meant to exist in potential rather than reality. Perhaps we were too beautiful an idea to survive the everyday erosion of actuality. Some loves are meant to live forever in the realm of almost.</p>
+                {% elif chapter_id == 9 %}
+                    <p>Under this same moon, we made promises we couldn't keep to a future we couldn't predict. I remember the weight of your head on my shoulder, the way you breathed when you thought I was sleeping, the dreams you whispered in the dark.</p>
+                    
+                    <p>Now I find myself apologizing to the night sky for all the ways I failed to hold onto what we had. The moon has become my confessor, a silent witness to regrets that taste like salt and sound like your name.</p>
+                    
+                    <p>But moonlight is forgiving, washing everything in silver mercy. Under its glow, even broken things look beautiful. Even endings can look like beginnings if you squint just right and believe in the possibility of second chances.</p>
+                {% else %}
+                    <p>The wind carries voices of everyone who has ever left, everyone who has ever been loved, everyone who exists now only in the ache of missing them. Sometimes, when the air moves just right through the trees, I swear I can hear you calling my name.</p>
+                    
+                    <p>I have learned to listen more carefully to the world, understanding now that love doesn't die—it just changes form. You exist in the rustle of leaves, in the way light moves across water, in every unexpected moment of beauty that stops my breath.</p>
+                    
+                    <p>This is how we continue: not as we were, but as whispers in the wind, as echoes in empty rooms, as the feeling that someone, somewhere, is thinking of us with the same tenderness we once shared. This is how love survives its own ending—by becoming part of everything else.</p>
+                {% endif %}
+            </div>
+        </div>
+    </article>
+    
+    <div class="chapter-navigation-bottom">
+        {% if prev_chapter %}
+            <a href="{{ url_for('chapter', chapter_id=prev_chapter) }}" class="nav-btn prev-btn">
+                <i class="fas fa-chevron-left"></i>
+                <span>Previous Chapter</span>
+            </a>
+        {% endif %}
+        
+        {% if next_chapter %}
+            <a href="{{ url_for('chapter', chapter_id=next_chapter) }}" class="nav-btn next-btn">
+                <span>Next Chapter</span>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        {% endif %}
+    </div>
+    
+    <!-- Comments Section -->
+    <section class="comments-section">
+        <div class="comments-header">
+            <h3>Reader Reflections</h3>
+            <p>Share your thoughts on this chapter. What resonated with you?</p>
+        </div>
+        
+        <!-- Comment Form -->
+        <form class="comment-form" method="POST" action="{{ url_for('add_comment', chapter_id=chapter_id) }}">
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Your name" required class="form-input">
+            </div>
+            <div class="form-group">
+                <textarea name="thought" placeholder="Your reflection on this chapter..." required class="form-textarea"></textarea>
+            </div>
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-heart"></i>
+                <span>Share Reflection</span>
+            </button>
+        </form>
+        
+        <!-- Existing Comments -->
+        <div class="comments-list">
+            {% if comments %}
+                {% for comment in comments %}
+                <div class="comment">
+                    <div class="comment-header">
+                        <span class="comment-author">{{ comment.name }}</span>
+                        <span class="comment-date">{{ comment.timestamp.strftime('%B %d, %Y') }}</span>
+                    </div>
+                    <div class="comment-content">
+                        <p>{{ comment.thought }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-comments">
+                    <p>Be the first to share your reflection on this chapter.</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+{% endblock %}
