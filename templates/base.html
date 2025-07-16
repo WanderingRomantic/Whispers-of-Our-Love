@@ -18,9 +18,8 @@
 </head>
 <body>
     <!-- Background audio -->
-    <audio id="background-music" loop>
-        <source src="https://www.soundjay.com/misc/sounds/piano-moment.mp3" type="audio/mpeg">
-        <!-- Fallback to a piano music URL -->
+    <audio id="background-music" loop preload="none">
+        <!-- Web Audio API will provide ambient music -->
     </audio>
     
     <!-- Music toggle button -->

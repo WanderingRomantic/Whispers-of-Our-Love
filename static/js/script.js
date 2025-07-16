@@ -16,6 +16,9 @@ class MusicPlayer {
             this.audio.loop = true;
         }
         
+        // Initialize Web Audio API as primary music system
+        this.loadFallbackMusic();
+        
         // Bind events
         if (this.musicBtn) {
             this.musicBtn.addEventListener('click', () => this.toggle());
@@ -29,53 +32,142 @@ class MusicPlayer {
             }
         }, { once: true });
         
-        // Handle audio events
+        // Handle audio events if using regular audio element
         if (this.audio) {
             this.audio.addEventListener('play', () => {
-                this.isPlaying = true;
-                this.updateButton();
+                if (!this.isUsingWebAudio) {
+                    this.isPlaying = true;
+                    this.updateButton();
+                }
             });
             
             this.audio.addEventListener('pause', () => {
-                this.isPlaying = false;
-                this.updateButton();
-            });
-            
-            this.audio.addEventListener('error', (e) => {
-                console.log('Audio failed to load, using fallback');
-                this.loadFallbackMusic();
+                if (!this.isUsingWebAudio) {
+                    this.isPlaying = false;
+                    this.updateButton();
+                }
             });
         }
     }
     
     loadFallbackMusic() {
-        // If the original source fails, try a different approach
-        if (this.audio) {
-            // Use a web-based piano music API or service
-            this.audio.src = 'https://www.soundjay.com/misc/sounds/piano-moment.mp3';
-            // Alternative: use a different service or disable music gracefully
+        // If audio files fail, create soft ambient tones using Web Audio API
+        try {
+            this.createAmbientMusic();
+        } catch (error) {
+            console.log('Web Audio API not available, music disabled');
+            this.showMusicMessage('Music is not available in this browser');
         }
     }
     
-    toggle() {
-        if (!this.audio) return;
+    createAmbientMusic() {
+        // Create a gentle ambient soundscape using Web Audio API
+        if (!window.AudioContext && !window.webkitAudioContext) {
+            return;
+        }
         
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        this.isUsingWebAudio = true;
+        
+        // Create a simple ambient drone with gentle frequencies
+        this.createAmbientDrone();
+    }
+    
+    createAmbientDrone() {
+        if (!this.audioContext) return;
+        
+        // Create multiple oscillators for a rich ambient sound
+        const frequencies = [220, 330, 440, 660]; // Gentle piano-like frequencies
+        this.oscillators = [];
+        
+        frequencies.forEach((freq, index) => {
+            const oscillator = this.audioContext.createOscillator();
+            const gainNode = this.audioContext.createGain();
+            
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(freq, this.audioContext.currentTime);
+            
+            // Very low volume for ambient effect
+            gainNode.gain.setValueAtTime(0.02 + (index * 0.005), this.audioContext.currentTime);
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(this.audioContext.destination);
+            
+            this.oscillators.push({ oscillator, gainNode });
+        });
+    }
+    
+    playWebAudio() {
+        if (!this.oscillators || !this.audioContext) return;
+        
+        // Resume audio context if suspended
+        if (this.audioContext.state === 'suspended') {
+            this.audioContext.resume();
+        }
+        
+        this.oscillators.forEach(({ oscillator }) => {
+            try {
+                oscillator.start();
+            } catch (e) {
+                // Oscillator may already be started
+            }
+        });
+        
+        this.isPlaying = true;
+        this.updateButton();
+    }
+    
+    stopWebAudio() {
+        if (!this.oscillators) return;
+        
+        this.oscillators.forEach(({ oscillator }) => {
+            try {
+                oscillator.stop();
+            } catch (e) {
+                // Oscillator may already be stopped
+            }
+        });
+        
+        // Recreate oscillators for next play
+        this.createAmbientDrone();
+        
+        this.isPlaying = false;
+        this.updateButton();
+    }
+    
+    toggle() {
         try {
+            if (this.isUsingWebAudio) {
+                if (this.isPlaying) {
+                    this.stopWebAudio();
+                } else {
+                    this.playWebAudio();
+                }
+                return;
+            }
+            
+            if (!this.audio) {
+                this.loadFallbackMusic();
+                return;
+            }
+            
             if (this.isPlaying) {
                 this.audio.pause();
             } else {
                 const playPromise = this.audio.play();
                 if (playPromise !== undefined) {
                     playPromise.catch(error => {
-                        console.log('Auto-play prevented:', error);
-                        // Show a user-friendly message
-                        this.showMusicMessage();
+                        console.log('Audio file playback failed, switching to Web Audio:', error);
+                        this.loadFallbackMusic();
+                        if (this.isUsingWebAudio) {
+                            this.playWebAudio();
+                        }
                     });
                 }
             }
         } catch (error) {
             console.log('Music playback error:', error);
-            this.showMusicMessage();
+            this.loadFallbackMusic();
         }
     }
     
@@ -94,13 +186,18 @@ class MusicPlayer {
         }
     }
     
-    showMusicMessage() {
+    showMusicMessage(customMessage = null) {
         // Create a temporary message for music issues
         const message = document.createElement('div');
         message.className = 'flash-message';
-        message.textContent = 'Music playback requires user permission. Click the music button to enable.';
+        message.textContent = customMessage || 'Music playback requires user permission. Click the music button to enable.';
         
-        const flashContainer = document.querySelector('.flash-messages') || document.body;
+        let flashContainer = document.querySelector('.flash-messages');
+        if (!flashContainer) {
+            flashContainer = document.createElement('div');
+            flashContainer.className = 'flash-messages';
+            document.body.appendChild(flashContainer);
+        }
         flashContainer.appendChild(message);
         
         setTimeout(() => {
