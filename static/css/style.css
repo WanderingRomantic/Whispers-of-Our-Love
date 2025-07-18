@@ -434,6 +434,17 @@ h1, h2, h3, h4, h5, h6 {
     font-style: italic;
 }
 
+/* Music button loading state */
+.music-button.loading {
+    opacity: 0.7;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
 .chapters-footer {
     text-align: center;
     margin-top: 3rem;

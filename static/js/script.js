@@ -10,10 +10,13 @@ class MusicPlayer {
     }
     
     init() {
-        // Set initial volume
+        // Set initial volume and preload
         if (this.audio) {
             this.audio.volume = 0.3;
             this.audio.loop = true;
+            this.audio.preload = 'auto';
+            // Load the audio file immediately
+            this.audio.load();
         }
         
         // Bind events
@@ -37,14 +40,26 @@ class MusicPlayer {
                 this.isPlaying = false;
                 this.updateButton();
             });
+            
+            this.audio.addEventListener('canplaythrough', () => {
+                console.log('Music fully loaded and ready');
+                this.musicReady = true;
+                this.attemptAutoplay();
+            });
+            
+            this.audio.addEventListener('loadstart', () => {
+                console.log('Music started loading');
+                this.updateButtonLoading();
+            });
+            
+            this.audio.addEventListener('progress', () => {
+                console.log('Music loading progress...');
+            });
         }
-        
-        // Auto-play attempt with user interaction fallback
-        this.attemptAutoplay();
     }
     
     attemptAutoplay() {
-        if (!this.audio) return;
+        if (!this.audio || !this.musicReady) return;
         
         // Set volume before attempting to play
         this.audio.volume = 0.3;
@@ -94,7 +109,6 @@ class MusicPlayer {
                 cleanup();
             }, { once: true });
         });
-    }
     }
     
     loadFallbackMusic() {
@@ -189,6 +203,11 @@ class MusicPlayer {
                 return;
             }
             
+            if (!this.musicReady) {
+                this.showMusicMessage('Music is still loading, please wait...');
+                return;
+            }
+            
             if (this.isPlaying) {
                 this.audio.pause();
                 this.isPlaying = false;
@@ -215,6 +234,8 @@ class MusicPlayer {
         if (!this.musicBtn) return;
         
         const icon = this.musicBtn.querySelector('i');
+        this.musicBtn.classList.remove('loading');
+        
         if (this.isPlaying) {
             this.musicBtn.classList.add('playing');
             if (icon) icon.className = 'fas fa-pause';
@@ -224,6 +245,16 @@ class MusicPlayer {
             if (icon) icon.className = 'fas fa-music';
             this.musicBtn.title = 'Play Music';
         }
+    }
+    
+    updateButtonLoading() {
+        if (!this.musicBtn) return;
+        
+        const icon = this.musicBtn.querySelector('i');
+        this.musicBtn.classList.add('loading');
+        this.musicBtn.classList.remove('playing');
+        if (icon) icon.className = 'fas fa-spinner fa-spin';
+        this.musicBtn.title = 'Loading music...';
     }
     
     showMusicMessage(customMessage = null) {
