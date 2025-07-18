@@ -9,7 +9,7 @@ CHAPTERS = {
         'quote': 'We were a thousand pieces of a puzzle that never quite fit together, yet somehow made the most beautiful picture when scattered.'
     },
     2: {
-        'title': 'When Eyes Looked Away',
+        'title': 'The Memory That Refused to Fade',
         'quote': 'I memorized the way you looked at everything else, searching for the moment you would look at me the same way again.'
     },
     3: {
