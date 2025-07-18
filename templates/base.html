@@ -18,8 +18,9 @@
 </head>
 <body>
     <!-- Background audio -->
-    <audio id="background-music" loop preload="none">
-        <!-- Web Audio API will provide ambient music -->
+    <audio id="background-music" loop preload="metadata">
+        <source src="{{ url_for('static', filename='audio/background-music.mp3') }}" type="audio/mpeg">
+        Your browser does not support the audio element.
     </audio>
     
     <!-- Music toggle button -->

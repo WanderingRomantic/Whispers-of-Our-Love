@@ -16,36 +16,26 @@ class MusicPlayer {
             this.audio.loop = true;
         }
         
-        // Initialize Web Audio API as primary music system
-        this.loadFallbackMusic();
-        
         // Bind events
         if (this.musicBtn) {
             this.musicBtn.addEventListener('click', () => this.toggle());
         }
         
-        // Auto-play attempt (will be blocked by most browsers until user interaction)
-        document.addEventListener('click', () => {
-            if (!this.initialized) {
-                this.initialized = true;
-                // Don't auto-start, let user control
-            }
-        }, { once: true });
-        
-        // Handle audio events if using regular audio element
+        // Handle audio events
         if (this.audio) {
             this.audio.addEventListener('play', () => {
-                if (!this.isUsingWebAudio) {
-                    this.isPlaying = true;
-                    this.updateButton();
-                }
+                this.isPlaying = true;
+                this.updateButton();
             });
             
             this.audio.addEventListener('pause', () => {
-                if (!this.isUsingWebAudio) {
-                    this.isPlaying = false;
-                    this.updateButton();
-                }
+                this.isPlaying = false;
+                this.updateButton();
+            });
+            
+            this.audio.addEventListener('ended', () => {
+                this.isPlaying = false;
+                this.updateButton();
             });
         }
     }
@@ -137,37 +127,30 @@ class MusicPlayer {
     
     toggle() {
         try {
-            if (this.isUsingWebAudio) {
-                if (this.isPlaying) {
-                    this.stopWebAudio();
-                } else {
-                    this.playWebAudio();
-                }
-                return;
-            }
-            
             if (!this.audio) {
-                this.loadFallbackMusic();
+                console.log('Audio element not found');
                 return;
             }
             
             if (this.isPlaying) {
                 this.audio.pause();
+                this.isPlaying = false;
             } else {
                 const playPromise = this.audio.play();
                 if (playPromise !== undefined) {
-                    playPromise.catch(error => {
-                        console.log('Audio file playback failed, switching to Web Audio:', error);
-                        this.loadFallbackMusic();
-                        if (this.isUsingWebAudio) {
-                            this.playWebAudio();
-                        }
+                    playPromise.then(() => {
+                        this.isPlaying = true;
+                        this.updateButton();
+                    }).catch(error => {
+                        console.log('Audio playback failed:', error);
+                        this.showMusicMessage('Music playback requires user permission. Please try again.');
                     });
                 }
             }
+            this.updateButton();
         } catch (error) {
             console.log('Music playback error:', error);
-            this.loadFallbackMusic();
+            this.showMusicMessage('Music is not available in this browser');
         }
     }
     
