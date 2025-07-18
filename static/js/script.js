@@ -12,7 +12,7 @@ class MusicPlayer {
     init() {
         // Set initial volume and preload
         if (this.audio) {
-            this.audio.volume = 0.3;
+            this.audio.volume = 0.7;
             this.audio.loop = true;
             this.audio.preload = 'auto';
             // Load the audio file immediately
@@ -62,7 +62,7 @@ class MusicPlayer {
         if (!this.audio || !this.musicReady) return;
         
         // Set volume before attempting to play
-        this.audio.volume = 0.3;
+        this.audio.volume = 0.7;
         
         // Try to autoplay immediately
         const playPromise = this.audio.play();
