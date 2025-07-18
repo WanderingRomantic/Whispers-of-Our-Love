@@ -38,6 +38,63 @@ class MusicPlayer {
                 this.updateButton();
             });
         }
+        
+        // Auto-play attempt with user interaction fallback
+        this.attemptAutoplay();
+    }
+    
+    attemptAutoplay() {
+        if (!this.audio) return;
+        
+        // Set volume before attempting to play
+        this.audio.volume = 0.3;
+        
+        // Try to autoplay immediately
+        const playPromise = this.audio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                this.isPlaying = true;
+                this.updateButton();
+                console.log('Music started automatically');
+            }).catch(() => {
+                // Autoplay blocked, set up user interaction listener
+                console.log('Autoplay blocked, waiting for user interaction');
+                this.setupAutoplayOnInteraction();
+            });
+        }
+    }
+    
+    setupAutoplayOnInteraction() {
+        const startMusic = () => {
+            if (!this.isPlaying && this.audio) {
+                const playPromise = this.audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        this.isPlaying = true;
+                        this.updateButton();
+                        console.log('Music started after user interaction');
+                    }).catch(() => {
+                        console.log('Music failed to start even after interaction');
+                    });
+                }
+            }
+        };
+        
+        // Start music on any user interaction
+        const events = ['click', 'touchstart', 'keydown'];
+        const cleanup = () => {
+            events.forEach(event => {
+                document.removeEventListener(event, startMusic);
+            });
+        };
+        
+        events.forEach(event => {
+            document.addEventListener(event, () => {
+                startMusic();
+                cleanup();
+            }, { once: true });
+        });
+    }
     }
     
     loadFallbackMusic() {
