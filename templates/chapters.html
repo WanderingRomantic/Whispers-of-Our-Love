@@ -11,18 +11,32 @@
     
     <div class="chapters-grid">
         {% for chapter_id, chapter in chapters.items() %}
-        <div class="chapter-card" data-chapter="{{ chapter_id }}">
-            <a href="{{ url_for('chapter', chapter_id=chapter_id) }}" class="chapter-link">
-                <div class="chapter-number">Chapter {{ chapter_id }}</div>
-                <h3 class="chapter-title">{{ chapter.title }}</h3>
-                <div class="chapter-preview">
-                    <p class="chapter-quote">"{{ chapter.quote[:100] }}{% if chapter.quote|length > 100 %}...{% endif %}"</p>
+        <div class="chapter-card {% if chapter_id > 3 %}locked{% endif %}" data-chapter="{{ chapter_id }}">
+            {% if chapter_id <= 3 %}
+                <a href="{{ url_for('chapter', chapter_id=chapter_id) }}" class="chapter-link">
+                    <div class="chapter-number">Chapter {{ chapter_id }}</div>
+                    <h3 class="chapter-title">{{ chapter.title }}</h3>
+                    <div class="chapter-preview">
+                        <p class="chapter-quote">"{{ chapter.quote[:100] }}{% if chapter.quote|length > 100 %}...{% endif %}"</p>
+                    </div>
+                    <div class="chapter-meta">
+                        <span class="read-time">5 min read</span>
+                        <i class="fas fa-arrow-right chapter-arrow"></i>
+                    </div>
+                </a>
+            {% else %}
+                <div class="chapter-link locked-chapter">
+                    <div class="chapter-number">Chapter {{ chapter_id }}</div>
+                    <h3 class="chapter-title">{{ chapter.title }}</h3>
+                    <div class="chapter-preview">
+                        <p class="chapter-quote">"{{ chapter.quote[:100] }}{% if chapter.quote|length > 100 %}...{% endif %}"</p>
+                    </div>
+                    <div class="chapter-meta">
+                        <span class="locked-text">Locked</span>
+                        <i class="fas fa-lock chapter-lock"></i>
+                    </div>
                 </div>
-                <div class="chapter-meta">
-                    <span class="read-time">5 min read</span>
-                    <i class="fas fa-arrow-right chapter-arrow"></i>
-                </div>
-            </a>
+            {% endif %}
         </div>
         {% endfor %}
     </div>

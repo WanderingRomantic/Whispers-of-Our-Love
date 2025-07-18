@@ -400,6 +400,40 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateX(5px);
 }
 
+/* Locked chapters */
+.chapter-card.locked {
+    opacity: 0.6;
+    position: relative;
+}
+
+.chapter-card.locked::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    z-index: 1;
+}
+
+.locked-chapter {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.chapter-lock {
+    color: #ff6b8a;
+    font-size: 1.2rem;
+}
+
+.locked-text {
+    color: #ff6b8a;
+    font-weight: 500;
+    font-style: italic;
+}
+
 .chapters-footer {
     text-align: center;
     margin-top: 3rem;

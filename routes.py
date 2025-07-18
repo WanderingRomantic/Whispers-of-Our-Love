@@ -60,12 +60,17 @@ def chapter(chapter_id):
         flash('Chapter not found.')
         return redirect(url_for('chapters'))
     
+    # Only allow access to chapters 1-3
+    if chapter_id > 3:
+        flash('This chapter is currently locked. Only the first 3 chapters are available.')
+        return redirect(url_for('chapters'))
+    
     chapter_data = CHAPTERS[chapter_id]
     comments = Comment.query.filter_by(chapter_id=chapter_id).order_by(Comment.timestamp.desc()).all()
     
-    # Navigation
+    # Navigation - only show next if it's accessible
     prev_chapter = chapter_id - 1 if chapter_id > 1 else None
-    next_chapter = chapter_id + 1 if chapter_id < len(CHAPTERS) else None
+    next_chapter = chapter_id + 1 if chapter_id < 3 else None
     
     return render_template('chapter.html', 
                          chapter_id=chapter_id,
