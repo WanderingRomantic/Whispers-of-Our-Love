@@ -13,7 +13,7 @@ CHAPTERS = {
         'quote': 'I memorized the way you looked at everything else, searching for the moment you would look at me the same way again.'
     },
     3: {
-        'title': 'Letters Never Sent',
+        'title': 'Life lost it\'s hue without her',
         'quote': 'My heart wrote you letters every day, but my hands never learned the courage to send them into your world.'
     },
     4: {
