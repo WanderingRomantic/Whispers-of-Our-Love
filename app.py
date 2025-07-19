@@ -30,8 +30,8 @@ app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
 db.init_app(app)
 
 with app.app_context():
-    # Import models
-    import models
+    # Import the renamed models file
+    import models_custom as models
     
     # Create all tables
     db.create_all()
